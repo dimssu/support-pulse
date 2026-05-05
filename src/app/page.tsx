@@ -1,65 +1,74 @@
-import Image from "next/image";
+import { Filter, ListFilter, ArrowUpDown, Sparkles, ChevronDown } from "lucide-react";
+import { tickets, type Lane } from "@/data/tickets";
+import { LaneHeader } from "@/components/LaneHeader";
+import { TicketRow } from "@/components/TicketRow";
+import { RightRail } from "@/components/RightRail";
 
-export default function Home() {
+const LANES: Lane[] = ["fire", "high", "normal", "low", "auto"];
+
+export default function InboxPage() {
+  const grouped = LANES.map((lane) => ({
+    lane,
+    items: tickets.filter((t) => t.lane === lane),
+  }));
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex h-full">
+      {/* Center column: ticket list */}
+      <section className="flex flex-1 flex-col min-w-0 border-r border-[var(--border)] bg-[var(--bg-elev)]">
+        {/* Section header */}
+        <div className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-3">
+          <h1 className="font-display text-[15px] font-semibold tracking-tight">Live triage inbox</h1>
+          <span className="rounded-full bg-[var(--bg)] px-2 py-0.5 font-mono text-[10.5px] text-[var(--text-mute)] ring-1 ring-inset ring-[var(--border)]">
+            {tickets.length} tickets
+          </span>
+          <div className="ml-auto flex items-center gap-1.5">
+            <button className="flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--bg-elev)] px-2 py-1 text-[11.5px] text-[var(--text-mute)] hover:bg-[var(--bg)]">
+              <Sparkles className="h-3 w-3 text-[var(--accent)]" />
+              AI re-triage
+            </button>
+            <button className="flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--bg-elev)] px-2 py-1 text-[11.5px] text-[var(--text-mute)] hover:bg-[var(--bg)]">
+              <Filter className="h-3 w-3" />
+              Plan
+              <ChevronDown className="h-3 w-3" />
+            </button>
+            <button className="flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--bg-elev)] px-2 py-1 text-[11.5px] text-[var(--text-mute)] hover:bg-[var(--bg)]">
+              <ListFilter className="h-3 w-3" />
+              Tags
+              <ChevronDown className="h-3 w-3" />
+            </button>
+            <button className="flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--bg-elev)] px-2 py-1 text-[11.5px] text-[var(--text-mute)] hover:bg-[var(--bg)]">
+              <ArrowUpDown className="h-3 w-3" />
+              Newest
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Lanes */}
+        <div className="flex-1 overflow-y-auto scrollbar-thin">
+          {grouped.map(({ lane, items }) =>
+            items.length === 0 ? null : (
+              <div key={lane}>
+                <LaneHeader lane={lane} count={items.length} />
+                <div>
+                  {items.map((t, i) => (
+                    <TicketRow key={t.id} ticket={t} index={i} />
+                  ))}
+                </div>
+              </div>
+            ),
+          )}
+
+          {/* footer marker */}
+          <div className="px-5 py-6 text-center">
+            <span className="font-mono text-[10.5px] uppercase tracking-wider text-[var(--text-subtle)]">
+              · End of queue · synced 8s ago ·
+            </span>
+          </div>
         </div>
-      </main>
+      </section>
+
+      <RightRail />
     </div>
   );
 }
