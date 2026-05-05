@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Support Pulse
 
-## Getting Started
+> AI ticket triage and drafted replies for SaaS support teams.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-ff0080?logo=framer)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript)
+
+Support Pulse is a triage cockpit for SaaS support teams. Tickets are auto-classified into priority lanes (Fire / High / Normal / Low / Auto-resolved), each ticket comes with a drafted reply that cites the knowledge-base articles and prior tickets it pulled from, and a team scorecard surfaces specific coaching moments grounded in the audit log.
+
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm i && npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app boots on [`http://localhost:3001`](http://localhost:3001).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build && npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+builds and serves a production bundle.
 
-## Learn More
+## Routes
 
-To learn more about Next.js, take a look at the following resources:
+- `/` — Live triage inbox: 28 seeded tickets across five AI-classified priority lanes, with plan-tier ribbons, AI tag chips, suggested-action chips, an SLA-at-risk panel, on-call rotation, and a 24h AI digest.
+- `/ticket/[id]` — Ticket detail with full thread, customer context (plan / MRR / account age / last 5 tickets), and an AI-drafted reply card with three tone presets, inline citations, and a "Why this reply" expandable showing source documents.
+- `/team` — Team scorecard for 8 agents: per-agent metrics (first response, resolution, CSAT, volume, escalation rate), a 12-week multi-line SVG trend chart, and 5 coaching moments tied to specific tickets.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Screenshots
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+![Hero](./public/screenshots/hero.png)
+![Inbox](./public/screenshots/dashboard.png)
+![Ticket detail](./public/screenshots/detail.png)
 
-## Deploy on Vercel
+## Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 16 (App Router) · Tailwind CSS 4 · Framer Motion · lucide-react · TypeScript · Inter / Space Grotesk / JetBrains Mono via `next/font`.
